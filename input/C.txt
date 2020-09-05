@@ -1,0 +1,342 @@
+/* 头文件 */
+#include "test.h"
+#include "xxxBlockView.h"
+
+/* 内部结构体声明 */
+
+/* 计算函数输入参数结构体 */
+typedef struct
+{
+    xxx_COMPLEX_F *pst_SrcCBlk;
+    xxx_COMPLEX_F *pst_DstCBlk;
+    xxx_COMPLEX_F *pst_PhsRdCBlk;
+    xxx_REAL_F *pst_BackAmpBlk;
+    xxx_REAL_F *pst_FBufBlk;
+    xxx_REAL_BL *pst_BlBufBlk;
+    float *pfBackAmp;
+    unsigned int *puiN_Start;
+    unsigned int *puiN_End;
+    vsip_scalar_vi uiN_AlignSum;
+    vsip_scalar_vi uiFBufSum;
+    xxx_test_PARA *pst_testPara;
+} DEL_test_PARA;
+
+/* 拷贝函数输入参数结构体 */
+typedef struct
+{
+    float *pfSrcData;
+    float *pfDstData;
+    xxx_test_PARA *pst_testPara;
+} COPY_PARA;
+
+/* 函数声明 */
+
+/* 子函数声明 */
+static int test_ex(
+    FCT_CALC_PARA *pst_CorePara,
+    DEL_test_PARA *pst_TestPara
+);
+
+static int TestDet(
+    vsip_vview_bl *pblFlagView,
+    unsigned int *puiN_Start,
+    unsigned int *puiN_End,
+    unsigned int *puiDetN_Sum
+);
+
+static int Copy(FCT_CALC_PARA *pst_CorePara, COPY_PARA *pst_CopyPara);
+
+/* 函数代码（单核） */
+int Test(
+    float *pfSrcData,
+    float *pfDstData,
+    float *pfPhaseRandom,
+    float *pfBackAmp,
+    float *pfBuf,
+    xxx_test_PARA *pst_testPara,
+    SPB_FUNC_INIT *pst_VsipResrc
+)
+{
+    vsip_scalar_i iRet = 0;
+    COPY_PARA st_CopyPara;
+    DEL_test_PARA st_testPara;
+    FCT_CALC_PARA st_CorePara;
+
+    //功能算法是否运行
+    if (0 == pst_testPara->uiIftest)
+    {
+        st_CorePara.iCalcId = 0;
+        st_CorePara.iStart = 0;
+        st_CorePara.iLen = (int) (pst_testPara->uiQNum *
+                                  pst_testPara->uiNNum);
+
+        st_CopyPara.pfSrcData = pfSrcData;
+        st_CopyPara.pfDstData = pfDstData;
+        st_CopyPara.pst_testPara = pst_testPara;
+
+        iRet = Copy(&st_CorePara, &st_CopyPara);
+    }
+
+    /* 数据块和矢量计算视角分配 */
+    iRet = BindBlock(pfSrcData, pfDstData, pfPhaseRandom, pfBackAmp, pfBuf,
+        pst_testPara, 1, pst_VsipResrc, &st_testPara);
+
+    st_CorePara.iCalcId = 0;
+    st_CorePara.iStart = 0;
+    st_CorePara.iLen = (int) (pst_testPara->uiQNum *
+                              pst_testPara->uiNNum);
+
+    /* 功能函数 */
+    iRet = test_ex(&st_CorePara, &st_testPara);
+}
+
+/* 函数代码（多核） */
+int Test_T(
+    float *pfSrcData,
+    float *pfDstData,
+    float *pfPhaseRandom,
+    float *pfBackAmp,
+    float *pfBuf,
+    xxx_test_PARA *pst_testPara,
+    int iCompCore,  //核数由外部给予
+    SPB_FUNC_INIT *pst_VsipResrc
+)
+{
+    vsip_scalar_i iRet = 0;
+    COPY_PARA st_CopyPara;
+    DEL_test_PARA st_testPara;
+
+    /* 不进行算法处理 */
+    if (pst_testPara->uiIftest == 0)
+    {
+        st_CopyPara.pfSrcData = pfSrcData;
+        st_CopyPara.pfDstData = pfDstData;
+        st_CopyPara.pst_testPara = pst_testPara;
+
+        /* 调用多核计算任务 */
+        iRet = FrmCalcRun((FUNC_POINT) Copy,
+                          iCompCore,
+                          (int) (pst_testPara->uiQNum *
+                                 pst_testPara->uiNNum),
+                          &st_CopyPara);
+    }
+
+    /* 数据块和矢量视角分配 */
+    iRet = BindBlock(pfSrcData, pfDstData, pfPhaseRandom, pfBackAmp, pfBuf,
+        pst_testPara, iCompCore, pst_VsipResrc, &st_testPara);
+
+    //并行框架调用
+    iRet = FrmCalcRun((FUNC_POINT) test_ex,
+                          iCompCore,
+                          (int) (pst_testPara->uiQNum *
+                                 pst_testPara->uiNNum),
+                          &st_testPara);
+    
+    return SPB_TRUE_FLAG;
+}
+
+/* 执行函数 */
+static int test_ex(
+    FCT_CALC_PARA *pst_CorePara,
+    DEL_test_PARA *pst_TestPara
+)
+{
+    vsip_scalar_i iRet = 0;
+    vsip_scalar_i iStart = 0;
+    vsip_scalar_i iLen = 0;
+    vsip_scalar_i iEnd = 0;
+    vsip_scalar_i iCalcId = 0;
+    vsip_scalar_f fBackAmp = 0;
+
+    vsip_scalar_i i = 0;
+    unsigned int j = 0;
+
+    unsigned int uiDetN_Num = 0;
+    unsigned int uiN_Width = 0;
+    unsigned int piN_Start = 0;
+    unsigned int piN_End = 0;
+    unsigned int uitestWidthThres = 0;
+    vsip_scalar_vi uiNNum = 0;
+    vsip_scalar_vi uiMNum = 0;
+    vsip_scalar_vi uiN_AlignSum = 0;
+    vsip_scalar_vi uiFBufSum = 0;
+    vsip_scalar_f ftestThres = 0;
+
+    vsip_cvview_f *pfSrcCView = NULL;
+    vsip_cvview_f *pfDstCView = NULL;
+    vsip_cvview_f *pfPhsRdCView = NULL;
+    vsip_vview_f *pfSrcAmpView = NULL;
+    vsip_vview_f *pfThresView = NULL;
+    vsip_vview_bl *pblFlagView = NULL;
+    vsip_scalar_f *pfBackAmp = NULL;
+
+    unsigned int *puiN_Start = NULL;
+    unsigned int *puiN_End = NULL;
+
+    xxx_test_PARA *pst_testPara = NULL;
+
+    /* 获得核处理数据起始和数据长度 */
+    iStart = pst_CorePara->iStart;
+    iLen = pst_CorePara->iLen;
+    iCalcId = pst_CorePara->iCalcId;
+    iEnd = iStart + iLen;
+
+    /* 输入参数 */
+    pst_testPara = pst_TestPara->pst_testPara;
+    uiN_AlignSum = pst_TestPara->uiN_AlignSum;
+    uiFBufSum = pst_TestPara->uiFBufSum;
+    pfBackAmp = pst_TestPara->pfBackAmp;
+    puiN_Start = pst_TestPara->puiN_Start + iCalcId * uiN_AlignSum;
+    puiN_End = pst_TestPara->puiN_End + iCalcId * uiN_AlignSum;
+
+    uiMNum = pst_testPara->uiMNum;
+    uiNNum = pst_testPara->uiNNum;
+    ftestThres = pst_testPara->ftestThres;
+    uitestWidthThres = pst_testPara->uitestWidthThres;
+
+    /* 绑定每个任务使用的VIEW */
+    pfSrcCView = pst_TestPara->pst_SrcCBlk->pfCView[iCalcId][0];
+    iRet = setCViewF(pfSrcCView, 0, 1, uiMNum);
+
+    pfDstCView = pst_TestPara->pst_DstCBlk->pfCView[iCalcId][0];
+    iRet = setCViewF(pfDstCView, 0, 1, uiMNum);
+
+    pfPhsRdCView = pst_TestPara->pst_PhsRdCBlk->pfCView[iCalcId][0];
+    iRet = setCViewF(pfPhsRdCView, 0, 1, uiMNum);
+
+    pfSrcAmpView = pst_TestPara->pst_FBufBlk->pfView[iCalcId][0];
+    iRet = setViewF(pfSrcAmpView, uiFBufSum * iCalcId, 1, uiMNum);
+
+    pfThresView = pst_TestPara->pst_FBufBlk->pfView[iCalcId][0];
+    iRet = setViewF(pfThresView, uiFBufSum *iCalcId + uiN_AlignSum,
+                    0, uiMNum);
+
+    pblFlagView = pst_TestPara->pst_BlBufBlk->pblView[iCalcId][0];
+    iRet = setViewBL(pblFlagView, iCalcId * uiN_AlignSum, 1, uiMNum);
+
+    /* 按数据拆分规则进行 */
+    for (i = iStart; i < iEnd; ++i)
+    {
+        vsip_cvputoffset_f(pfSrcCView, i * uiMNum);
+
+        vsip_cvputoffset_f(pfDstCView, i * uiMNum);
+        vsip_cvputlength_f(pfDstCView, uiMNum);
+
+        /* 数据拷贝 */
+        vsip_cvcopy_f_f(pfSrcCView, pfDstCView);
+
+        vsip_cvmag_f(pfSrcCView, pfSrcAmpView);
+
+        fBackAmp = pfBackAmp[i / uiNNum];
+        vsip_vput_f(pfThresView, 0, fBackAmp * ftestThres);
+        vsip_vlgt_f(pfSrcAmpView, pfThresView, pblFlagView);
+
+        /* 功能处理 */
+        TestDet(pblFlagView, puiN_Start, puiN_End, &uiDetN_Num);
+
+        for (j = 0; j < uiDetN_Num; ++j)
+        {
+            piN_Start = puiN_Start[j];
+            piN_End = puiN_End[j];
+            if (piN_End < piN_Start)
+            {
+                continue;
+            }
+
+            uiN_Width = piN_End - piN_Start + 1;
+            if (uiN_Width > uitestWidthThres)
+            {
+                continue;
+            }
+
+            vsip_cvputoffset_f(pfPhsRdCView, i * uiMNum + piN_Start);
+            vsip_cvputlength_f(pfPhsRdCView, uiN_Width);
+
+            vsip_cvputoffset_f(pfDstCView, i * uiMNum + piN_Start);
+            vsip_cvputlength_f(pfDstCView, uiN_Width);
+
+            vsip_rscvmul_f(fBackAmp, pfPhsRdCView, pfDstCView);
+        }
+    }
+
+    return SPB_TRUE_FLAG;  
+}
+
+/* 子函数（N维度处理） */
+static int TestDet(
+    vsip_vview_bl *pblFlagView,
+    unsigned int *puiN_Start,
+    unsigned int *puiN_End,
+    unsigned int *puiDetN_Sum
+)
+{
+    unsigned int i = 0;
+    unsigned int uiMNum = 0;
+    unsigned int uiDetN_Num = 0;
+    vsip_scalar_bl uiN_UpFlag = 0;
+
+    uiMNum = (unsigned int) vsip_vgetlength_bl(pblFlagView);
+
+    /* 起始位置标记为真，任务是上升沿 */
+    if (vsip_vget_bl(pblFlagView, 0) == VSIP_TRUE)
+    {
+        puiN_Start[uiDetN_Num] = 0;
+        uiN_UpFlag = VSIP_TRUE;
+    }
+
+    for (i = 1; i < uiMNum; ++i)
+    {
+        if ((vsip_vget_bl(pblFlagView, i - 1) == VSIP_FALSE) &&
+            (vsip_vget_bl(pblFlagView, i) == VSIP_TRUE))
+        {
+            uiN_UpFlag = VSIP_TRUE;
+            puiN_Start[uiDetN_Num] = i;
+        }
+        else if ((vsip_vget_bl(pblFlagView, i - 1) == VSIP_TRUE) &&
+                 (vsip_vget_bl(pblFlagView, i) == VSIP_FALSE))
+        {
+            uiN_UpFlag = VSIP_FALSE;
+            puiN_END[uiDetN_Num++] = i - 1;
+        }
+        else
+        {
+            continue;
+        }
+    }
+
+    /* 结束位置标记为真，认为是下降沿 */
+    if ((vsip_vget_bl(pblFlagView, uiMNum - 1) == VSIP_TRUE) &&
+        (uiN_UpFlag == VSIP_TRUE))
+    {
+        puiN_END[uiDetN_Num++] = uiMNum - 1;
+    }
+
+    *puiDetN_Sum = uiDetN_Num;
+
+    return SPB_TRUE_FLAG;
+}
+
+/* Copy子函数 */
+static int Copy(FCT_CALC_PARA *pst_CorePara, COPY_PARA *pst_CopyPara)
+{
+    int iStart = 0;
+    int iLen = 0;
+    unsigned int uiMNum = 0;
+
+    float *pfSrcData = NULL;
+    float *pfDstData = NULL;
+
+    /* 获得处理数据起始和数据长度 */
+    iStart = pst_CorePara->iStart;
+    iLen = pst_CorePara->iLen;
+
+    uiMNum = pst_CopyPara->pst_testPara->uiMNum;
+    pfSrcData = pst_CopyPara->pfSrcData;
+    pfDstData = pst_CopyPara->pfDstData;
+
+    memcpy(pfDstData + iStart * uiMNum * 2,
+           pfSrcData + iStart * uiMNum * 2,
+           iLen * uiMNum * sizeof(float) * 2);
+    
+    return SPB_TRUE_FLAG;
+}

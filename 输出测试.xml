@@ -1,0 +1,18 @@
+
+<AssignmentExpr operator="=">
+  <Matrix type="float" mtype="s">fBackAmp_s</Matrix>
+  <IndexExpr operator="()">
+    <Matrix type="float *" mtype="v">pfBackAmp_v</Matrix>
+    <RangeExpr>
+      <ColonExpr operator=":">
+        <AdditiveExpr operator="+">
+          <MultiplicativeExpr operator="/">
+            <Identifier type="int">i</Identifier>
+            <Identifier type="unsigned int">uiNNum</Identifier>
+          </MultiplicativeExpr>
+          <Constant>1</Constant>
+        </AdditiveExpr>
+      </ColonExpr>
+    </RangeExpr>
+  </IndexExpr>
+</AssignmentExpr>

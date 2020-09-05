@@ -1,0 +1,93 @@
+function [pfDstData] = test(pfSrcData, pfPhaseRandom, pfBackAmp, pfBuf, ...
+	pst_testPara)
+
+uiMNum = pst_testPara.uiMNum;
+uiIftest = pst_testPara.uiIftest;
+
+if uiIftest == 0
+	pfDstData = Copy(pfSrcData, pst_testPara);
+	return;
+end
+
+pfSrcAmp = pfBuf(1:uiMNum);
+piFlag = pfBuf(uiMNum + 1:2 * uiMNum);
+piN_Start = pfBuf(2 * uiMNum + 1:3*uiMNum);
+piN_End = pfBuf(3 * uiMNum + 1:4 * uiMNum);
+
+pfDstData = test_ex(pfSrcData,pfPhaseRandom,pfBackAmp,pfSrcAmp,...
+	piFlag,piN_Start,piN_End,pst_testPara);
+end
+
+function [pfDstData] = test_ex(pfSrcData,pfPhaseRandom,pfBackAmp,pfSrcAmp,...
+	piFlag,piN_Start,piN_End,pst_testPara)
+
+uiQNum = pst_testPara.uiQNum;
+uiMNum = pst_testPara.uiMNum;
+uiNNum = pst_testPara.uiNNum;
+ftestThres = pst_testPara.ftestThres;
+uitestWidthThres = pst_testPara.uitestWidthThres;
+
+for i = 1 : uiQNum * uiNNum
+	pfNowSrcData = pfSrcData((i - 1) * uiMNum + 1 : i *uiMNum);
+	pfNowDstData = pfNowSrcData;
+	pfSrcAmp(:) = abs(pfNowSrcData);
+	fBackAmp = pfBackAmp(floor((i - 1) / uiNNum) + 1);
+	piFlag(:) = pfSrcAmp > ftestThres * fBackAmp;
+	[uiDetN_Num,piN_Start(:),piN_End(:)] = testDet(piFlag);
+
+	for j = 1 : uiDetN_Num
+		uiJamWidth = piN_End(j) - piN_Start(j) + 1;
+		if uiJamWidth > uitestWidthThres
+			continue;
+		end;
+		pfNowPhaseRandom = pfPhaseRandom((i - 1) * uiMNum + 1 : i * uiMNum);
+		pfNowDstData(piN_Start(j) :piN_End(j)) = ...
+		pfNowPhaseRandom(piN_Start(j) : piN_End(j)) * fBackAmp;
+	end
+
+	pfDstData((i - 1) * uiMNum + 1 :i * uiMNum) = pfNowDstData;
+end
+end
+
+function [puiDetN_Num,piN_Start,piN_End] = testDet(piFlag)
+
+uiDetN_Num = 0;
+uiN_UpFlag = 0;
+uiMNum = length(piFlag);
+
+piN_Start = zeros(1, uiMNum);
+piN_End = zeros(1, uiMNum);
+
+for n = 1 : uiMNum
+	if n == 1 && piFlag(n) == 1
+		uiDetN_Num = uiDetN_Num +1;
+		piN_Start(uiDetN_Num) = n;
+		uiN_UpFlag = 1;
+	elseif n > 1 && piFlag(n) == 1 && piFlag(n - 1) == 0
+		uiDetN_Num = uiDetN_Num + 1;
+		piN_Start(uiDetN_Num) = n;
+		uiN_UpFlag = 1;
+	elseif n > 1 && piFlag(n-1)==1 && piFlag(n) == 0
+		piN_End(uiDetN_Num) = n - 1;
+		uiN_UpFlag = 0;
+	end
+
+	if n == uiNNum && uiN_UpFlag == 1
+		piN_End(uiDetN_Num) = n;
+		uiN_UpFlag = 0;
+	end
+end
+
+puiDetN_Num = uiDetN_Num;
+end
+
+function [pfDstData] = Copy(pfSrcData, pst_testPara)
+uiMNum = pst_testPara.uiMNum;
+uiNNum = pst_testPara.uiNNum;
+uiQNum = pst_testPara.uiQNum;
+
+for i = 1 :uiQNum * uiNNum
+	pfDstData((i - 1) * uiMNum + 1 : i * uiMNum) = ...
+	pfSrcData((i - 1) * uiMNum + 1 : i * uiMNum);
+end
+end

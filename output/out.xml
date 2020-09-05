@@ -1,0 +1,776 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Program>
+  <Function>
+    <ReturnList>
+      <Identifier type="float *">pfDstData</Identifier>
+    </ReturnList>
+    <FunctionName>test</FunctionName>
+    <ArgumentList>
+      <Identifier type="float *">pfSrcData</Identifier>
+      <Identifier type="float *">pfPhaseRandom</Identifier>
+      <Identifier type="float *">pfBackAmp</Identifier>
+      <Identifier type="float *">pfBuf</Identifier>
+      <Identifier type="struct *">pst_testPara</Identifier>
+    </ArgumentList>
+    <AssignmentExpr operator="=">
+      <Identifier type="unsigned int">uiMNum</Identifier>
+      <AccessField operator=".">
+        <Identifier type="struct *">pst_testPara</Identifier>
+        <Identifier type="unsigned int">uiMNum</Identifier>
+      </AccessField>
+    </AssignmentExpr>
+    <AssignmentExpr operator="=">
+      <Identifier type="unsigned int">uiIftest</Identifier>
+      <AccessField operator=".">
+        <Identifier type="struct *">pst_testPara</Identifier>
+        <Identifier type="unsigned int">uiIftest</Identifier>
+      </AccessField>
+    </AssignmentExpr>
+    <IfStatement>
+      <IfBlock>
+        <EqualityExpr operator="==">
+          <Identifier type="unsigned int">uiIftest</Identifier>
+          <Constant>0</Constant>
+        </EqualityExpr>
+        <AssignmentExpr operator="=">
+          <Identifier type="float *">pfDstData</Identifier>
+          <FunctionCall operator="()">
+            <FunctionName>Copy</FunctionName>
+            <ArgumentList>
+              <Identifier type="float *">pfSrcData</Identifier>
+              <Identifier type="struct *">pst_testPara</Identifier>
+            </ArgumentList>
+          </FunctionCall>
+        </AssignmentExpr>
+        <return></return>
+      </IfBlock>
+    </IfStatement>
+    <AssignmentExpr operator="=">
+      <Identifier type="float *">pfSrcAmp</Identifier>
+      <IndexExpr operator="()">
+        <Matrix type="float *">pfBuf</Matrix>
+        <RangeExpr>
+          <ColonExpr operator=":">
+            <Constant>1</Constant>
+            <Identifier type="unsigned int">uiMNum</Identifier>
+          </ColonExpr>
+        </RangeExpr>
+      </IndexExpr>
+    </AssignmentExpr>
+    <AssignmentExpr operator="=">
+      <Identifier type="int *">piFlag</Identifier>
+      <IndexExpr operator="()">
+        <Matrix type="float *">pfBuf</Matrix>
+        <RangeExpr>
+          <ColonExpr operator=":">
+            <AdditiveExpr operator="+">
+              <Identifier type="unsigned int">uiMNum</Identifier>
+              <Constant>1</Constant>
+            </AdditiveExpr>
+            <MultiplicativeExpr operator="*">
+              <Constant>2</Constant>
+              <Identifier type="unsigned int">uiMNum</Identifier>
+            </MultiplicativeExpr>
+          </ColonExpr>
+        </RangeExpr>
+      </IndexExpr>
+    </AssignmentExpr>
+    <AssignmentExpr operator="=">
+      <Identifier type="int *">piN_Start</Identifier>
+      <IndexExpr operator="()">
+        <Matrix type="float *">pfBuf</Matrix>
+        <RangeExpr>
+          <ColonExpr operator=":">
+            <AdditiveExpr operator="+">
+              <MultiplicativeExpr operator="*">
+                <Constant>2</Constant>
+                <Identifier type="unsigned int">uiMNum</Identifier>
+              </MultiplicativeExpr>
+              <Constant>1</Constant>
+            </AdditiveExpr>
+            <MultiplicativeExpr operator="*">
+              <Constant>3</Constant>
+              <Identifier type="unsigned int">uiMNum</Identifier>
+            </MultiplicativeExpr>
+          </ColonExpr>
+        </RangeExpr>
+      </IndexExpr>
+    </AssignmentExpr>
+    <AssignmentExpr operator="=">
+      <Identifier type="int *">piN_End</Identifier>
+      <IndexExpr operator="()">
+        <Matrix type="float *">pfBuf</Matrix>
+        <RangeExpr>
+          <ColonExpr operator=":">
+            <AdditiveExpr operator="+">
+              <MultiplicativeExpr operator="*">
+                <Constant>3</Constant>
+                <Identifier type="unsigned int">uiMNum</Identifier>
+              </MultiplicativeExpr>
+              <Constant>1</Constant>
+            </AdditiveExpr>
+            <MultiplicativeExpr operator="*">
+              <Constant>4</Constant>
+              <Identifier type="unsigned int">uiMNum</Identifier>
+            </MultiplicativeExpr>
+          </ColonExpr>
+        </RangeExpr>
+      </IndexExpr>
+    </AssignmentExpr>
+    <AssignmentExpr operator="=">
+      <Identifier type="float *">pfDstData</Identifier>
+      <FunctionCall operator="()">
+        <FunctionName>test_ex</FunctionName>
+        <ArgumentList>
+          <Identifier type="float *">pfSrcData</Identifier>
+          <Identifier type="float *">pfPhaseRandom</Identifier>
+          <Identifier type="float *">pfBackAmp</Identifier>
+          <Identifier type="float *">pfSrcAmp</Identifier>
+          <Identifier type="int *">piFlag</Identifier>
+          <Identifier type="int *">piN_Start</Identifier>
+          <Identifier type="int *">piN_End</Identifier>
+          <Identifier type="struct *">pst_testPara</Identifier>
+        </ArgumentList>
+      </FunctionCall>
+    </AssignmentExpr>
+  </Function>
+  <Function>
+    <ReturnList>
+      <Identifier type="float *">pfDstData</Identifier>
+    </ReturnList>
+    <FunctionName>test_ex</FunctionName>
+    <ArgumentList>
+      <Identifier type="float *">pfSrcData</Identifier>
+      <Identifier type="float *">pfPhaseRandom</Identifier>
+      <Identifier type="float *">pfBackAmp</Identifier>
+      <Identifier type="float *">pfSrcAmp</Identifier>
+      <Identifier type="int *">piFlag</Identifier>
+      <Identifier type="int *">piN_Start</Identifier>
+      <Identifier type="int *">piN_End</Identifier>
+      <Identifier type="struct *">pst_testPara</Identifier>
+    </ArgumentList>
+    <AssignmentExpr operator="=">
+      <Identifier type="unsigned int">uiQNum</Identifier>
+      <AccessField operator=".">
+        <Identifier type="struct *">pst_testPara</Identifier>
+        <Identifier type="unsigned int">uiQNum</Identifier>
+      </AccessField>
+    </AssignmentExpr>
+    <AssignmentExpr operator="=">
+      <Identifier type="unsigned int">uiMNum</Identifier>
+      <AccessField operator=".">
+        <Identifier type="struct *">pst_testPara</Identifier>
+        <Identifier type="unsigned int">uiMNum</Identifier>
+      </AccessField>
+    </AssignmentExpr>
+    <AssignmentExpr operator="=">
+      <Identifier type="unsigned int">uiNNum</Identifier>
+      <AccessField operator=".">
+        <Identifier type="struct *">pst_testPara</Identifier>
+        <Identifier type="unsigned int">uiNNum</Identifier>
+      </AccessField>
+    </AssignmentExpr>
+    <AssignmentExpr operator="=">
+      <Identifier type="float">ftestThres</Identifier>
+      <AccessField operator=".">
+        <Identifier type="struct *">pst_testPara</Identifier>
+        <Identifier type="float">ftestThres</Identifier>
+      </AccessField>
+    </AssignmentExpr>
+    <AssignmentExpr operator="=">
+      <Identifier type="unsigned int">uitestWidthThres</Identifier>
+      <AccessField operator=".">
+        <Identifier type="struct *">pst_testPara</Identifier>
+        <Identifier type="unsigned int">uitestWidthThres</Identifier>
+      </AccessField>
+    </AssignmentExpr>
+    <ForStatement>
+      <AssignmentExpr operator="=">
+        <Identifier type="int">i</Identifier>
+        <ColonExpr operator=":">
+          <Constant>1</Constant>
+          <MultiplicativeExpr operator="*">
+            <Identifier type="unsigned int">uiQNum</Identifier>
+            <Identifier type="unsigned int">uiNNum</Identifier>
+          </MultiplicativeExpr>
+        </ColonExpr>
+      </AssignmentExpr>
+      <AssignmentExpr operator="=">
+        <Identifier type="float *">pfNowSrcData</Identifier>
+        <IndexExpr operator="()">
+          <Matrix type="float *">pfSrcData</Matrix>
+          <RangeExpr>
+            <ColonExpr operator=":">
+              <AdditiveExpr operator="+">
+                <MultiplicativeExpr operator="*">
+                  <AdditiveExpr operator="-">
+                    <Identifier type="int">i</Identifier>
+                    <Constant>1</Constant>
+                  </AdditiveExpr>
+                  <Identifier type="unsigned int">uiMNum</Identifier>
+                </MultiplicativeExpr>
+                <Constant>1</Constant>
+              </AdditiveExpr>
+              <MultiplicativeExpr operator="*">
+                <Identifier type="int">i</Identifier>
+                <Identifier type="unsigned int">uiMNum</Identifier>
+              </MultiplicativeExpr>
+            </ColonExpr>
+          </RangeExpr>
+        </IndexExpr>
+      </AssignmentExpr>
+      <AssignmentExpr operator="=">
+        <Identifier type="float *">pfNowDstData</Identifier>
+        <Identifier type="float *">pfNowSrcData</Identifier>
+      </AssignmentExpr>
+      <Operation>pfSrcAmp(:) = abs(pfNowSrcData)</Operation>
+      <AssignmentExpr operator="=">
+        <Identifier type="float">fBackAmp</Identifier>
+        <IndexExpr operator="()">
+          <Matrix type="float *">pfBackAmp</Matrix>
+          <RangeExpr>
+            <ColonExpr operator=":">
+              <AdditiveExpr operator="+">
+                <IndexExpr operator="()">
+                  <Matrix type="float">floor</Matrix>
+                  <RangeExpr>
+                    <ColonExpr operator=":">
+                      <MultiplicativeExpr operator="/">
+                        <AdditiveExpr operator="-">
+                          <Identifier type="int">i</Identifier>
+                          <Constant>1</Constant>
+                        </AdditiveExpr>
+                        <Identifier type="unsigned int">uiNNum</Identifier>
+                      </MultiplicativeExpr>
+                    </ColonExpr>
+                  </RangeExpr>
+                </IndexExpr>
+                <Constant>1</Constant>
+              </AdditiveExpr>
+            </ColonExpr>
+          </RangeExpr>
+        </IndexExpr>
+      </AssignmentExpr>
+      <AssignmentExpr operator="=">
+        <IndexExpr operator="()">
+          <Matrix type="int *">piFlag</Matrix>
+          <RangeExpr>
+            <ColonExpr operator=":"></ColonExpr>
+          </RangeExpr>
+        </IndexExpr>
+        <RelationalExpr operator="&gt;">
+          <Identifier type="float *">pfSrcAmp</Identifier>
+          <MultiplicativeExpr operator="*">
+            <Identifier type="float">ftestThres</Identifier>
+            <Identifier type="float">fBackAmp</Identifier>
+          </MultiplicativeExpr>
+        </RelationalExpr>
+      </AssignmentExpr>
+      <AssignmentExpr operator="=">
+        <ReturnList operator="[]">
+          <Identifier type="unsigned int">uiDetN_Num</Identifier>
+          <IndexExpr operator="()">
+            <Matrix type="int *">piN_Start</Matrix>
+            <RangeExpr>
+              <ColonExpr operator=":"></ColonExpr>
+            </RangeExpr>
+          </IndexExpr>
+          <IndexExpr operator="()">
+            <Matrix type="int *">piN_End</Matrix>
+            <RangeExpr>
+              <ColonExpr operator=":"></ColonExpr>
+            </RangeExpr>
+          </IndexExpr>
+        </ReturnList>
+        <FunctionCall operator="()">
+          <FunctionName>testDet</FunctionName>
+          <ArgumentList>
+            <Identifier type="int *">piFlag</Identifier>
+          </ArgumentList>
+        </FunctionCall>
+      </AssignmentExpr>
+      <ForStatement>
+        <AssignmentExpr operator="=">
+          <Identifier type="int">j</Identifier>
+          <ColonExpr operator=":">
+            <Constant>1</Constant>
+            <Identifier type="unsigned int">uiDetN_Num</Identifier>
+          </ColonExpr>
+        </AssignmentExpr>
+        <AssignmentExpr operator="=">
+          <Identifier type="unsigned int">uiJamWidth</Identifier>
+          <AdditiveExpr operator="+">
+            <AdditiveExpr operator="-">
+              <IndexExpr operator="()">
+                <Matrix type="int *">piN_End</Matrix>
+                <RangeExpr>
+                  <ColonExpr operator=":">
+                    <Identifier type="int">j</Identifier>
+                  </ColonExpr>
+                </RangeExpr>
+              </IndexExpr>
+              <IndexExpr operator="()">
+                <Matrix type="int *">piN_Start</Matrix>
+                <RangeExpr>
+                  <ColonExpr operator=":">
+                    <Identifier type="int">j</Identifier>
+                  </ColonExpr>
+                </RangeExpr>
+              </IndexExpr>
+            </AdditiveExpr>
+            <Constant>1</Constant>
+          </AdditiveExpr>
+        </AssignmentExpr>
+        <IfStatement>
+          <IfBlock>
+            <RelationalExpr operator="&gt;">
+              <Identifier type="unsigned int">uiJamWidth</Identifier>
+              <Identifier type="unsigned int">uitestWidthThres</Identifier>
+            </RelationalExpr>
+            <continue></continue>
+          </IfBlock>
+        </IfStatement>
+        <AssignmentExpr operator="=">
+          <Identifier type="float *">pfNowPhaseRandom</Identifier>
+          <IndexExpr operator="()">
+            <Matrix type="float *">pfPhaseRandom</Matrix>
+            <RangeExpr>
+              <ColonExpr operator=":">
+                <AdditiveExpr operator="+">
+                  <MultiplicativeExpr operator="*">
+                    <AdditiveExpr operator="-">
+                      <Identifier type="int">i</Identifier>
+                      <Constant>1</Constant>
+                    </AdditiveExpr>
+                    <Identifier type="unsigned int">uiMNum</Identifier>
+                  </MultiplicativeExpr>
+                  <Constant>1</Constant>
+                </AdditiveExpr>
+                <MultiplicativeExpr operator="*">
+                  <Identifier type="int">i</Identifier>
+                  <Identifier type="unsigned int">uiMNum</Identifier>
+                </MultiplicativeExpr>
+              </ColonExpr>
+            </RangeExpr>
+          </IndexExpr>
+        </AssignmentExpr>
+        <AssignmentExpr operator="=">
+          <IndexExpr operator="()">
+            <Matrix type="float *">pfNowDstData</Matrix>
+            <RangeExpr>
+              <ColonExpr operator=":">
+                <IndexExpr operator="()">
+                  <Matrix type="int *">piN_Start</Matrix>
+                  <RangeExpr>
+                    <ColonExpr operator=":">
+                      <Identifier type="int">j</Identifier>
+                    </ColonExpr>
+                  </RangeExpr>
+                </IndexExpr>
+                <IndexExpr operator="()">
+                  <Matrix type="int *">piN_End</Matrix>
+                  <RangeExpr>
+                    <ColonExpr operator=":">
+                      <Identifier type="int">j</Identifier>
+                    </ColonExpr>
+                  </RangeExpr>
+                </IndexExpr>
+              </ColonExpr>
+            </RangeExpr>
+          </IndexExpr>
+          <MultiplicativeExpr operator="*">
+            <IndexExpr operator="()">
+              <Matrix type="float *">pfNowPhaseRandom</Matrix>
+              <RangeExpr>
+                <ColonExpr operator=":">
+                  <IndexExpr operator="()">
+                    <Matrix type="int *">piN_Start</Matrix>
+                    <RangeExpr>
+                      <ColonExpr operator=":">
+                        <Identifier type="int">j</Identifier>
+                      </ColonExpr>
+                    </RangeExpr>
+                  </IndexExpr>
+                  <IndexExpr operator="()">
+                    <Matrix type="int *">piN_End</Matrix>
+                    <RangeExpr>
+                      <ColonExpr operator=":">
+                        <Identifier type="int">j</Identifier>
+                      </ColonExpr>
+                    </RangeExpr>
+                  </IndexExpr>
+                </ColonExpr>
+              </RangeExpr>
+            </IndexExpr>
+            <Identifier type="float">fBackAmp</Identifier>
+          </MultiplicativeExpr>
+        </AssignmentExpr>
+      </ForStatement>
+      <AssignmentExpr operator="=">
+        <IndexExpr operator="()">
+          <Matrix type="float *">pfDstData</Matrix>
+          <RangeExpr>
+            <ColonExpr operator=":">
+              <AdditiveExpr operator="+">
+                <MultiplicativeExpr operator="*">
+                  <AdditiveExpr operator="-">
+                    <Identifier type="int">i</Identifier>
+                    <Constant>1</Constant>
+                  </AdditiveExpr>
+                  <Identifier type="unsigned int">uiMNum</Identifier>
+                </MultiplicativeExpr>
+                <Constant>1</Constant>
+              </AdditiveExpr>
+              <MultiplicativeExpr operator="*">
+                <Identifier type="int">i</Identifier>
+                <Identifier type="unsigned int">uiMNum</Identifier>
+              </MultiplicativeExpr>
+            </ColonExpr>
+          </RangeExpr>
+        </IndexExpr>
+        <Identifier type="float *">pfNowDstData</Identifier>
+      </AssignmentExpr>
+    </ForStatement>
+  </Function>
+  <Function>
+    <ReturnList>
+      <Identifier type="unsigned int *">puiDetN_Num</Identifier>
+      <Identifier type="int *">piN_Start</Identifier>
+      <Identifier type="int *">piN_End</Identifier>
+    </ReturnList>
+    <FunctionName>testDet</FunctionName>
+    <ArgumentList>
+      <Identifier type="int *">piFlag</Identifier>
+    </ArgumentList>
+    <AssignmentExpr operator="=">
+      <Identifier type="unsigned int">uiDetN_Num</Identifier>
+      <Constant>0</Constant>
+    </AssignmentExpr>
+    <AssignmentExpr operator="=">
+      <Identifier type="unsigned int">uiN_UpFlag</Identifier>
+      <Constant>0</Constant>
+    </AssignmentExpr>
+    <AssignmentExpr operator="=">
+      <Identifier type="unsigned int">uiMNum</Identifier>
+      <IndexExpr operator="()">
+        <Matrix type="int">length</Matrix>
+        <RangeExpr>
+          <ColonExpr operator=":">
+            <Identifier type="int *">piFlag</Identifier>
+          </ColonExpr>
+        </RangeExpr>
+      </IndexExpr>
+    </AssignmentExpr>
+    <AssignmentExpr operator="=">
+      <Identifier type="int *">piN_Start</Identifier>
+      <IndexExpr operator="()">
+        <Matrix type="int">zeros</Matrix>
+        <RangeExpr>
+          <ColonExpr operator=":">
+            <Constant>1</Constant>
+          </ColonExpr>
+          <ColonExpr operator=":">
+            <Identifier type="unsigned int">uiMNum</Identifier>
+          </ColonExpr>
+        </RangeExpr>
+      </IndexExpr>
+    </AssignmentExpr>
+    <AssignmentExpr operator="=">
+      <Identifier type="int *">piN_End</Identifier>
+      <IndexExpr operator="()">
+        <Matrix type="int">zeros</Matrix>
+        <RangeExpr>
+          <ColonExpr operator=":">
+            <Constant>1</Constant>
+          </ColonExpr>
+          <ColonExpr operator=":">
+            <Identifier type="unsigned int">uiMNum</Identifier>
+          </ColonExpr>
+        </RangeExpr>
+      </IndexExpr>
+    </AssignmentExpr>
+    <ForStatement>
+      <AssignmentExpr operator="=">
+        <Identifier type="int">n</Identifier>
+        <ColonExpr operator=":">
+          <Constant>1</Constant>
+          <Identifier type="unsigned int">uiMNum</Identifier>
+        </ColonExpr>
+      </AssignmentExpr>
+      <IfStatement>
+        <IfBlock>
+          <LogicalAndExpr operator="&amp;&amp;">
+            <EqualityExpr operator="==">
+              <Identifier type="int">n</Identifier>
+              <Constant>1</Constant>
+            </EqualityExpr>
+            <EqualityExpr operator="==">
+              <IndexExpr operator="()">
+                <Matrix type="int *">piFlag</Matrix>
+                <RangeExpr>
+                  <ColonExpr operator=":">
+                    <Identifier type="int">n</Identifier>
+                  </ColonExpr>
+                </RangeExpr>
+              </IndexExpr>
+              <Constant>1</Constant>
+            </EqualityExpr>
+          </LogicalAndExpr>
+          <AssignmentExpr operator="=">
+            <Identifier type="unsigned int">uiDetN_Num</Identifier>
+            <AdditiveExpr operator="+">
+              <Identifier type="unsigned int">uiDetN_Num</Identifier>
+              <Constant>1</Constant>
+            </AdditiveExpr>
+          </AssignmentExpr>
+          <AssignmentExpr operator="=">
+            <IndexExpr operator="()">
+              <Matrix type="int *">piN_Start</Matrix>
+              <RangeExpr>
+                <ColonExpr operator=":">
+                  <Identifier type="unsigned int">uiDetN_Num</Identifier>
+                </ColonExpr>
+              </RangeExpr>
+            </IndexExpr>
+            <Identifier type="int">n</Identifier>
+          </AssignmentExpr>
+          <AssignmentExpr operator="=">
+            <Identifier type="unsigned int">uiN_UpFlag</Identifier>
+            <Constant>1</Constant>
+          </AssignmentExpr>
+        </IfBlock>
+        <ElseifBlock>
+          <LogicalAndExpr operator="&amp;&amp;">
+            <LogicalAndExpr operator="&amp;&amp;">
+              <RelationalExpr operator="&gt;">
+                <Identifier type="int">n</Identifier>
+                <Constant>1</Constant>
+              </RelationalExpr>
+              <EqualityExpr operator="==">
+                <IndexExpr operator="()">
+                  <Matrix type="int *">piFlag</Matrix>
+                  <RangeExpr>
+                    <ColonExpr operator=":">
+                      <Identifier type="int">n</Identifier>
+                    </ColonExpr>
+                  </RangeExpr>
+                </IndexExpr>
+                <Constant>1</Constant>
+              </EqualityExpr>
+            </LogicalAndExpr>
+            <EqualityExpr operator="==">
+              <IndexExpr operator="()">
+                <Matrix type="int *">piFlag</Matrix>
+                <RangeExpr>
+                  <ColonExpr operator=":">
+                    <AdditiveExpr operator="-">
+                      <Identifier type="int">n</Identifier>
+                      <Constant>1</Constant>
+                    </AdditiveExpr>
+                  </ColonExpr>
+                </RangeExpr>
+              </IndexExpr>
+              <Constant>0</Constant>
+            </EqualityExpr>
+          </LogicalAndExpr>
+          <AssignmentExpr operator="=">
+            <Identifier type="unsigned int">uiDetN_Num</Identifier>
+            <AdditiveExpr operator="+">
+              <Identifier type="unsigned int">uiDetN_Num</Identifier>
+              <Constant>1</Constant>
+            </AdditiveExpr>
+          </AssignmentExpr>
+          <AssignmentExpr operator="=">
+            <IndexExpr operator="()">
+              <Matrix type="int *">piN_Start</Matrix>
+              <RangeExpr>
+                <ColonExpr operator=":">
+                  <Identifier type="unsigned int">uiDetN_Num</Identifier>
+                </ColonExpr>
+              </RangeExpr>
+            </IndexExpr>
+            <Identifier type="int">n</Identifier>
+          </AssignmentExpr>
+          <AssignmentExpr operator="=">
+            <Identifier type="unsigned int">uiN_UpFlag</Identifier>
+            <Constant>1</Constant>
+          </AssignmentExpr>
+        </ElseifBlock>
+        <ElseifBlock>
+          <LogicalAndExpr operator="&amp;&amp;">
+            <LogicalAndExpr operator="&amp;&amp;">
+              <RelationalExpr operator="&gt;">
+                <Identifier type="int">n</Identifier>
+                <Constant>1</Constant>
+              </RelationalExpr>
+              <EqualityExpr operator="==">
+                <IndexExpr operator="()">
+                  <Matrix type="int *">piFlag</Matrix>
+                  <RangeExpr>
+                    <ColonExpr operator=":">
+                      <AdditiveExpr operator="-">
+                        <Identifier type="int">n</Identifier>
+                        <Constant>1</Constant>
+                      </AdditiveExpr>
+                    </ColonExpr>
+                  </RangeExpr>
+                </IndexExpr>
+                <Constant>1</Constant>
+              </EqualityExpr>
+            </LogicalAndExpr>
+            <EqualityExpr operator="==">
+              <IndexExpr operator="()">
+                <Matrix type="int *">piFlag</Matrix>
+                <RangeExpr>
+                  <ColonExpr operator=":">
+                    <Identifier type="int">n</Identifier>
+                  </ColonExpr>
+                </RangeExpr>
+              </IndexExpr>
+              <Constant>0</Constant>
+            </EqualityExpr>
+          </LogicalAndExpr>
+          <AssignmentExpr operator="=">
+            <IndexExpr operator="()">
+              <Matrix type="int *">piN_End</Matrix>
+              <RangeExpr>
+                <ColonExpr operator=":">
+                  <Identifier type="unsigned int">uiDetN_Num</Identifier>
+                </ColonExpr>
+              </RangeExpr>
+            </IndexExpr>
+            <AdditiveExpr operator="-">
+              <Identifier type="int">n</Identifier>
+              <Constant>1</Constant>
+            </AdditiveExpr>
+          </AssignmentExpr>
+          <AssignmentExpr operator="=">
+            <Identifier type="unsigned int">uiN_UpFlag</Identifier>
+            <Constant>0</Constant>
+          </AssignmentExpr>
+        </ElseifBlock>
+      </IfStatement>
+      <IfStatement>
+        <IfBlock>
+          <LogicalAndExpr operator="&amp;&amp;">
+            <EqualityExpr operator="==">
+              <Identifier type="int">n</Identifier>
+              <Identifier type="unsigned int">uiNNum</Identifier>
+            </EqualityExpr>
+            <EqualityExpr operator="==">
+              <Identifier type="unsigned int">uiN_UpFlag</Identifier>
+              <Constant>1</Constant>
+            </EqualityExpr>
+          </LogicalAndExpr>
+          <AssignmentExpr operator="=">
+            <IndexExpr operator="()">
+              <Matrix type="int *">piN_End</Matrix>
+              <RangeExpr>
+                <ColonExpr operator=":">
+                  <Identifier type="unsigned int">uiDetN_Num</Identifier>
+                </ColonExpr>
+              </RangeExpr>
+            </IndexExpr>
+            <Identifier type="int">n</Identifier>
+          </AssignmentExpr>
+          <AssignmentExpr operator="=">
+            <Identifier type="unsigned int">uiN_UpFlag</Identifier>
+            <Constant>0</Constant>
+          </AssignmentExpr>
+        </IfBlock>
+      </IfStatement>
+    </ForStatement>
+    <AssignmentExpr operator="=">
+      <Identifier type="unsigned int *">puiDetN_Num</Identifier>
+      <Identifier type="unsigned int">uiDetN_Num</Identifier>
+    </AssignmentExpr>
+  </Function>
+  <Function>
+    <ReturnList>
+      <Identifier type="float *">pfDstData</Identifier>
+    </ReturnList>
+    <FunctionName>Copy</FunctionName>
+    <ArgumentList>
+      <Identifier type="float *">pfSrcData</Identifier>
+      <Identifier type="struct *">pst_testPara</Identifier>
+    </ArgumentList>
+    <AssignmentExpr operator="=">
+      <Identifier type="unsigned int">uiMNum</Identifier>
+      <AccessField operator=".">
+        <Identifier type="struct *">pst_testPara</Identifier>
+        <Identifier type="unsigned int">uiMNum</Identifier>
+      </AccessField>
+    </AssignmentExpr>
+    <AssignmentExpr operator="=">
+      <Identifier type="unsigned int">uiNNum</Identifier>
+      <AccessField operator=".">
+        <Identifier type="struct *">pst_testPara</Identifier>
+        <Identifier type="unsigned int">uiNNum</Identifier>
+      </AccessField>
+    </AssignmentExpr>
+    <AssignmentExpr operator="=">
+      <Identifier type="unsigned int">uiQNum</Identifier>
+      <AccessField operator=".">
+        <Identifier type="struct *">pst_testPara</Identifier>
+        <Identifier type="unsigned int">uiQNum</Identifier>
+      </AccessField>
+    </AssignmentExpr>
+    <ForStatement>
+      <AssignmentExpr operator="=">
+        <Identifier type="int">i</Identifier>
+        <ColonExpr operator=":">
+          <Constant>1</Constant>
+          <MultiplicativeExpr operator="*">
+            <Identifier type="unsigned int">uiQNum</Identifier>
+            <Identifier type="unsigned int">uiNNum</Identifier>
+          </MultiplicativeExpr>
+        </ColonExpr>
+      </AssignmentExpr>
+      <AssignmentExpr operator="=">
+        <IndexExpr operator="()">
+          <Matrix type="float *">pfDstData</Matrix>
+          <RangeExpr>
+            <ColonExpr operator=":">
+              <AdditiveExpr operator="+">
+                <MultiplicativeExpr operator="*">
+                  <AdditiveExpr operator="-">
+                    <Identifier type="int">i</Identifier>
+                    <Constant>1</Constant>
+                  </AdditiveExpr>
+                  <Identifier type="unsigned int">uiMNum</Identifier>
+                </MultiplicativeExpr>
+                <Constant>1</Constant>
+              </AdditiveExpr>
+              <MultiplicativeExpr operator="*">
+                <Identifier type="int">i</Identifier>
+                <Identifier type="unsigned int">uiMNum</Identifier>
+              </MultiplicativeExpr>
+            </ColonExpr>
+          </RangeExpr>
+        </IndexExpr>
+        <IndexExpr operator="()">
+          <Matrix type="float *">pfSrcData</Matrix>
+          <RangeExpr>
+            <ColonExpr operator=":">
+              <AdditiveExpr operator="+">
+                <MultiplicativeExpr operator="*">
+                  <AdditiveExpr operator="-">
+                    <Identifier type="int">i</Identifier>
+                    <Constant>1</Constant>
+                  </AdditiveExpr>
+                  <Identifier type="unsigned int">uiMNum</Identifier>
+                </MultiplicativeExpr>
+                <Constant>1</Constant>
+              </AdditiveExpr>
+              <MultiplicativeExpr operator="*">
+                <Identifier type="int">i</Identifier>
+                <Identifier type="unsigned int">uiMNum</Identifier>
+              </MultiplicativeExpr>
+            </ColonExpr>
+          </RangeExpr>
+        </IndexExpr>
+      </AssignmentExpr>
+    </ForStatement>
+  </Function>
+</Program>

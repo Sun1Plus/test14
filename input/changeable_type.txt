@@ -1,0 +1,4 @@
+cos % r = cos(a) % (v, v) => vsip_vcos_p(a, r) ||| (m, m) => vsip_mcos_p(a, r)
+abs % r = abs(a) % (v, v) => vsip_vmag_p(a, r) ||| (v, cv) => vsip_cvmag_p(a, r) ||| (m, cm) => vsip_cmmag_p(a, r)
++ % r = a + b % (v, v, v) => vsip_vadd_p(a, b, r) ||| (cv, cv, cv) => vsip_cvadd_p(a, b ,r) ||| (cm, cm, cm) => vsip_cmadd_p(a, b, r) |||
+(v, s, v) => vsip_svadd_p(a, b, r) ||| (cv, cs, cv) => vsip_csvadd_p(a, b, r) ||| (cv, s, cv) => vsip_rscvadd_p(a, b, r)

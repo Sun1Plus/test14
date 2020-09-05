@@ -1,0 +1,4 @@
+^ % r = 10 ^ a % (v, _, v) => vsip_vexp10_p(a, r) ||| (m, _, m) => vsip_mexp10_p(a, r)
+exp % r = exp(j * a) % (cv, _, v) => vsip_veuler_p(a, r) ||| (cm, _, m) => vsip_meuler_p(a, r)
+.^ % r = a .^ 2 % (v, v, _) => vsip_vsq_p(a, r)
+^ % r = a ^ 2 % (m, m, _) => vsip_msq_p(a, r)
